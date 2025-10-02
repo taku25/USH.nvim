@@ -2,12 +2,12 @@
 
 # Unreal Shell 💓 Neovim
 
-\<table\>
-  \<tr\>
-   \<td\>\<div align=center\>\<i\>[ USH.nvimのセッション開始とコマンド実行を示すGIF/画像 ]\</i\>\</div\>\</td\>
-   \<td\>\<div align=center\>\<i\>[ USH.nvimのビルドピッカーを示すGIF/画像 ]\</i\>\</div\>\</td\>
-  \</tr\>
-\</table\>
+<table>
+<tr>
+ <td><div align=center><img width="100%" alt="image" src="https://github.com/user-attachments/assets/d18ba4cb-2da1-4ac4-8b9f-8c150cdccf8f" /></div></td>
+</tr>
+</table>
+
 
 `USH.nvim` は、Unreal Engine の対話的シェル `ushell` と連携し、`.build`, `.cook`, `.run` といった様々なコマンドを、Neovimから直接、永続的な非同期セッション内で実行するためのプラグインです。
 
@@ -27,22 +27,12 @@
   * **統一されたUIピッカー**: [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) や [fzf-lua](https://github.com/ibhagwan/fzf-lua) といった人気のUIプラグインを自動で認識し、ビルドターゲットの選択を快適に行えます。(**オプション**)
   * **`UBT.nvim` との連携**: もし `UBT.nvim` がインストールされていれば、そのビルドプリセット設定を自動で読み込んで利用します。`USH.nvim` 単体でも動作するよう、フォールバック用のプリセットも内蔵しています。
 
-\<table\>
-  \<tr\>
-   \<td\>
-    \<div align=center\>
-      \<i\>[ :USH build\! でピッカーを起動するGIF ]\</i\>
-      \<p\>ビルドターゲットを選択\</p\>
-    \</div\>
-  \</td\>
-   \<td\>
-    \<div align=center\>
-      \<i\>[ :USH direct .cook ... を実行するGIF ]\</i\>
-      \<p\>任意のコマンドを直接実行\</p\>
-    \</div\>
-    \</td\>
-  \</tr\>
-\</table\>
+<table>
+<tr>
+ <td><div align=center><img width="100%" alt="image" src="https://github.com/user-attachments/assets/a90aabc2-41f0-464f-94e5-d679adb44bf6" /></div></td>
+</tr>
+</table>
+
 
 ## 🔧 必要要件 (Requirements)
 
