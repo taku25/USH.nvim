@@ -2,12 +2,13 @@
 
 # Unreal Shell 💓 Neovim
 
-\<table\>
-\<tr\>
-\<td\>\<div align="center"\>\<i\>[ GIF/Image showing USH.nvim session start and command execution ]\</i\>\</div\>\</td\>
-\<td\>\<div align="center"\>\<i\>[ GIF/Image showing the USH.nvim build picker ]\</i\>\</div\>\</td\>
-\</tr\>
-\</table\>
+ 
+<table>
+<tr>
+ <td><div align=center><img width="100%" alt="image" src="https://github.com/user-attachments/assets/d18ba4cb-2da1-4ac4-8b9f-8c150cdccf8f" /></div></td>
+</tr>
+</table>
+
 
 `USH.nvim` is a plugin to interact with Unreal Engine's interactive shell, `ushell`, directly from Neovim. It allows you to run various commands like `.build`, `.cook`, and `.run` within a persistent, asynchronous session.
 
@@ -27,22 +28,11 @@ Also available are [`ULG.nvim`](https://www.google.com/search?q=%5Bhttps://githu
   * **Unified UI Picker**: Automatically detects popular UI plugins like [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) and [fzf-lua](https://github.com/ibhagwan/fzf-lua) to provide a seamless experience for selecting build targets. (**Optional**)
   * **`UBT.nvim` Integration**: If `UBT.nvim` is installed, its build preset configuration is automatically loaded and used. Fallback presets are also built-in, allowing `USH.nvim` to function standalone.
 
-\<table\>
-\<tr\>
-\<td\>
-\<div align="center"\>
-\<i\>[ GIF of launching the picker with :USH build\! ]\</i\>
-\<p\>Select a build target\</p\>
-\</div\>
-\</td\>
-\<td\>
-\<div align="center"\>
-\<i\>[ GIF of running :USH direct .cook ... ]\</i\>
-\<p\>Execute any command directly\</p\>
-\</div\>
-\</td\>
-\</tr\>
-\</table\>
+<table>
+<tr>
+ <td><div align=center><img width="100%" alt="image" src="https://github.com/user-attachments/assets/a90aabc2-41f0-464f-94e5-d679adb44bf6" /></div></td>
+</tr>
+</table>
 
 ## 🔧 Requirements
 
