@@ -34,7 +34,42 @@ local subcommands = {
       { name = "target", type = "string", optional = true }
     },
   },
-
+  ["cook"] = {
+    handler = function(opts) api.cook(opts) end,
+    bang = true,
+    desc = ":USH cook [platform] [type] [options]",
+  },
+  ["run"] = {
+    handler = function(opts) api.run(opts) end,
+    bang = true,
+    desc = ":USH run [mode] [args...]",
+    -- args テーブルを定義しないことで、可変長の引数を受け取る
+  },
+  ["sln"] = {
+    handler = function(opts) api.sln(opts) end,
+    bang = true, -- bang(!)を入力してもエラーにならないように残しておく
+    desc = ":USH sln (Generates the .sln file)",
+    -- 引数を取らないので args テーブルは不要
+  },
+  ["uat"] = {
+    handler = function(opts) api.uat(opts) end,
+    bang = true,
+    desc = ":USH uat [UAT Command and Args...]",
+    -- args テーブルを定義しないことで、可変長の引数を受け取る
+  },
+  ["stage"] = {
+      handler = function(opts) api.stage(opts) end,
+      bang = true,
+      desc = ":USH stage [args...]",
+      -- args テーブルを定義しないことで、可変長の引数を受け取る
+  },
+  ["p4"] = {
+      handler = function(opts) api.p4(opts) end,
+      bang = true,
+      desc = ":USH p4 [subcommand] [args...]",
+      -- args テーブルを定義しないことで、可変長の引数を受け取る
+    },
+    
   -------------------------------------------------------------
   -- Raw Command Passthrough
   -------------------------------------------------------------

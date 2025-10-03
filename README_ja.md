@@ -1,5 +1,3 @@
-# USH.nvim
-
 # Unreal Shell 💓 Neovim
 
 <table>
@@ -8,11 +6,10 @@
 </tr>
 </table>
 
-
 `USH.nvim` は、Unreal Engine の対話的シェル `ushell` と連携し、`.build`, `.cook`, `.run` といった様々なコマンドを、Neovimから直接、永続的な非同期セッション内で実行するためのプラグインです。
 
 その他、Unreal Engine開発を強化するためのプラグイン群 ([`UEP.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/UEP.nvim%5D\(https://github.com/taku25/UEP.nvim\)), [`UCM.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/UCM.nvim%5D\(https://github.com/taku25/UCM.nvim\)), [`UBT.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/UBT.nvim%5D\(https://github.com/taku25/UBT.nvim\))) があります。
-([`ULG.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/ULG.nvim%5D\(https://github.com/taku25/ULG.nvim\)), [`neo-tree-unl.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/neo-tree-unl.nvim%5D\(https://github.com/taku25/neo-tree-unl.nvim\))) ,[tree-sitter for Unreal Engine](https://github.com/taku25/tree-sitter-unreal-cpp)があります。
+([`ULG.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/ULG.nvim%5D\(https://github.com/taku25/ULG.nvim\)), [`neo-tree-unl.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/neo-tree-unl.nvim%5D\(https://github.com/taku25/neo-tree-unl.nvim\))) ,[tree-sitter for Unreal Engine](https://www.google.com/search?q=https://github.com/taku25/tree-sitter-unreal-cpp)があります。
 
 [English](https://www.google.com/search?q=./README.md) | [日本語](https://www.google.com/search?q=./README_ja.md)
 
@@ -24,15 +21,14 @@
   * **柔軟な設定システム**:
       * `UNL.nvim` の強力な設定システムをベースにしており、グローバル設定に加え、プロジェクトルートの `.unlrc.json` ファイルによるプロジェクト固有設定の上書きが可能です。
   * **設定可能な出力**: `ushell` からのリアルタイムな出力を、[`ULG.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/ULG.nvim%5D\(https://github.com/taku25/ULG.nvim\)) のようなログビューアーや、`vim.notify`, `vim.echo` など、好みの場所にリダイレクトできます。
-  * **統一されたUIピッカー**: [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) や [fzf-lua](https://github.com/ibhagwan/fzf-lua) といった人気のUIプラグインを自動で認識し、ビルドターゲットの選択を快適に行えます。(**オプション**)
-  * **`UBT.nvim` との連携**: もし `UBT.nvim` がインストールされていれば、そのビルドプリセット設定を自動で読み込んで利用します。`USH.nvim` 単体でも動作するよう、フォールバック用のプリセットも内蔵しています。
+  * **統一されたUIピッカー**: [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) や [fzf-lua](https://github.com/ibhagwan/fzf-lua) といった人気のUIプラグインを自動で認識し、コマンドのプリセット選択を快適に行えます。(**オプション**)
+  * **`UEP.nvim` / `UBT.nvim` との連携**: もし `UBT.nvim` がインストールされていれば、そのビルドプリセット設定を自動で読み込んで利用します。また、`UEP.nvim` があれば、モジュール一覧をピッカーで表示できます。`USH.nvim` 単体でも動作するよう、フォールバック機能も内蔵しています。
 
 <table>
 <tr>
  <td><div align=center><img width="100%" alt="image" src="https://github.com/user-attachments/assets/a90aabc2-41f0-464f-94e5-d679adb44bf6" /></div></td>
 </tr>
 </table>
-
 
 ## 🔧 必要要件 (Requirements)
 
@@ -56,12 +52,12 @@
 -- lua/plugins/ush.lua
 
 return {
-  'taku25/USH.nvim',
-  dependencies = { 'taku25/UNL.nvim' },
-  
-  opts = {
-    -- ここに設定を記述します (詳細は後述)
-  }
+  'taku25/USH.nvim',
+  dependencies = { 'taku25/UNL.nvim' },
+  
+  opts = {
+    -- ここに設定を記述します (詳細は後述)
+  }
 }
 ```
 
@@ -74,41 +70,76 @@ return {
 -- init.lua や ush.lua の opts = { ... } の中身
 
 {
-  -- `UBT.nvim` の設定がない場合のフォールバック用ビルドプリセット
-  presets = {
-    { name = "Win64DevelopWithEditor", Platform = "Win64", IsEditor = true, Configuration = "Development" },
-    { name = "Win64DebugGameWithEditor", Platform = "Win64", IsEditor = true, Configuration = "DebugGame" },
-    { name = "Win64Develop", Platform = "Win64", IsEditor = false, Configuration = "Development" },
-    { name = "Win64DebugGame", Platform = "Win64", IsEditor = false, Configuration = "DebugGame" },
-    { name = "Win64Shipping", Platform = "Win64", IsEditor = false, Configuration = "Shipping" },
-  },
+  -- `UBT.nvim` の設定がない場合のフォールバック用ビルドプリセット
+  presets = {
+    { name = "Win64DevelopWithEditor", Platform = "Win64", IsEditor = true, Configuration = "Development" },
+    { name = "Win64DebugGameWithEditor", Platform = "Win64", IsEditor = true, Configuration = "DebugGame" },
+    { name = "Win64Develop", Platform = "Win64", IsEditor = false, Configuration = "Development" },
+    { name = "Win64DebugGame", Platform = "Win64", IsEditor = false, Configuration = "DebugGame" },
+    { name = "Win64Shipping", Platform = "Win64", IsEditor = false, Configuration = "Shipping" },
+  },
 
-  -- :USH build でターゲット名を省略した際のデフォルト
-  preset_target = "Win64DevelopWithEditor",
+  -- :USH build でターゲット名を省略した際のデフォルト
+  preset_target = "Win64DevelopWithEditor",
 
-  -- ushellからの出力先を指定
-  output = {
-    emitter = "ULG", -- "ULG", "notify", "echo", "none"
-    notify = {
-      level = vim.log.levels.INFO,
-    },
-  },
+  -- Cook command presets
+  cook_presets = {
+    { name = "Cook Game (Win64)", platform = "win64", type = "game", options = "" },
+    { name = "Cook Game OnTheFly (Win64)", platform = "win64", type = "game", options = "--onthefly" },
+  },
 
-  -- ===== UIとロギング設定 (UNL.nvimから継承) =====
-  
-  ui = {
-    picker = {
-      mode = "auto",
-      prefer = { "telescope", "fzf_lua", "native" },
-    },
-  },
+  -- Run command presets
+  run_presets = {
+    { name = "Run Editor", mode = "editor", args = "" },
+    { name = "Run Game", mode = "game", args = "" },
+    { name = "Run Game (Debug)", mode = "game", args = "--attach" },
+    { name = "Run Program (UnrealInsights)", mode = "program", args = "UnrealInsights" },
+  },
 
-  logging = {
-    level = "info",
-    echo = { level = "warn" },
-    notify = { level = "error", prefix = "[USH]" },
-    file = { enable = true, filename = "ush.log" },
-  },
+  -- Staging command presets
+  stage_presets = {
+    { name = "Stage Game (Win64)", args = "game win64" },
+    { name = "Stage Game (PS4, Dev, Full)", args = "game ps4 development pak --build --cook" },
+  },
+
+  -- UAT command presets
+  uat_presets = {
+    {
+      name = "Build, Cook, and Archive (Win64)",
+      command_string = "BuildAndCook -platform=Win64 -clientconfig=Development -cook -allmaps -build -stage -pak -archive",
+    },
+  },
+
+  -- P4 subcommands for the picker
+  p4_subcommands = {
+    { name = "sync", desc = "Syncs the current project and engine.", arg_required = false },
+    { name = "clean", desc = "Cleans intermediate files from the branch.", arg_required = false },
+    { name = "cherrypick", desc = "Integrates or reverts a changelist.", arg_required = true, arg_prompt = "Enter Changelist number(s):" },
+  },
+
+  -- ushellからの出力先を指定
+  output = {
+    emitter = "ULG", -- "ULG", "notify", "echo", "none"
+    notify = {
+      level = vim.log.levels.INFO,
+    },
+  },
+
+  -- ===== UIとロギング設定 (UNL.nvimから継承) =====
+  
+  ui = {
+    picker = {
+      mode = "auto",
+      prefer = { "telescope", "fzf_lua", "native" },
+    },
+  },
+
+  logging = {
+    level = "info",
+    echo = { level = "warn" },
+    notify = { level = "error", prefix = "[USH]" },
+    file = { enable = true, filename = "ush.log" },
+  },
 }
 ```
 
@@ -120,7 +151,7 @@ return {
 
 ```json
 {
-  "preset_target": "Win64Shipping"
+  "preset_target": "Win64Shipping"
 }
 ```
 
@@ -128,16 +159,22 @@ return {
 
 コマンドは、Unreal Engineプロジェクトのディレクトリ内で実行してください。
 
-```vim
-:USH start_session  " ushellセッションをバックグラウンドで開始します。
-:USH stop_session  " 現在のushellセッションを停止します。
-:USH build[!]        " プロジェクトをビルドします。[!]付きでUIピッカーを起動します。
-:USH direct ...     " '...'部分に指定したコマンドをushellに直接送信します (例: :USH direct .cook)。
-```
+| コマンド                  | 説明                                                                     |
+| ------------------------- | ------------------------------------------------------------------------ |
+| `:USH start_session`      | `ushell`セッションをバックグラウンドで開始します。                       |
+| `:USH stop_session`       | 現在の`ushell`セッションを停止します。                                   |
+| `:USH build[!] ...`       | プロジェクトをビルドします。[\!]付きでUIピッカーを起動します。             |
+| `:USH cook[!] ...`        | プロジェクトをクックします。[\!]付きでプリセットピッカーを起動します。     |
+| `:USH run[!] ...`         | プロジェクトやエディタを実行します。[\!]付きでプリセットピッカーを起動します。 |
+| `:USH stage[!] ...`       | ステージングを実行します。[\!]付きでプリセットピッカーを起動します。         |
+| `:USH uat[!] ...`         | Unreal Automation Toolを実行します。[\!]付きでプリセットピッカーを起動します。 |
+| `:USH sln[!] [generate]`  | ソリューションファイルを操作します。[generate]のみサポート。             |
+| `:USH p4[!] ...`          | Perforceコマンドを実行します。[\!]付きでサブコマンドピッカーを起動します。 |
+| `:USH direct ...`         | `'...'`部分のコマンドを`ushell`に直接送信します。                          |
 
 ### 💓 UIピッカー連携 (Telescope / fzf-lua)
 
-`:USH build!` のように `bang` 版 (`!`) を実行することで、設定に応じたUIピッカーが起動し、ビルドターゲットを選択できます。
+`:USH build!`, `:USH cook!`, `:USH run!` のように `bang` 版 (`!`) を実行することで、設定に応じたUIピッカーが起動し、プリセットやサブコマンドを簡単に選択できます。
 
 ## 🤖 API & 自動化 (Automation Examples)
 
@@ -151,23 +188,23 @@ Unreal Engineのプロジェクトディレクトリに `cd` した際に、自�
 -- init.lua or any setup file
 local ush_auto_start_group = vim.api.nvim_create_augroup("USH_AutoStartSession", { clear = true })
 vim.api.nvim_create_autocmd("DirChanged", {
-  group = ush_auto_start_group,
-  pattern = "*",
-  callback = function()
-    -- UNL.nvimのfinderで.uprojectファイルを探す
-    local finder = require("UNL.finder")
-    if not finder.project.find_project(vim.fn.getcwd()) then
-      return
-    end
+  group = ush_auto_start_group,
+  pattern = "*",
+  callback = function()
+    -- UNL.nvimのfinderで.uprojectファイルを探す
+    local finder = require("UNL.finder")
+    if not finder.project.find_project(vim.fn.getcwd()) then
+      return
+    end
 
-    -- セッションがまだアクティブでなければ開始
-    local session = require("USH.session")
-    if not session.is_active() then
-      vim.schedule(function()
-        require("USH.api").start_session()
-      end)
-    end
-  end,
+    -- セッションがまだアクティブでなければ開始
+    local session = require("USH.session")
+    if not session.is_active() then
+      vim.schedule(function()
+        require("USH.api").start_session()
+      end)
+    end
+  end,
 })
 ```
 
@@ -178,7 +215,7 @@ Unreal Engine 関連プラグイン:
   * [UEP.nvim](https://github.com/taku25/UEP.nvim) - Unreal Engine プロジェクトマネージャー
   * [UCM.nvim](https://github.com/taku25/UCM.nvim) - Unreal Engine クラスマネージャー
   * [UBT.nvim](https://github.com/taku25/UBT.nvim) - Unreal Build Tool ラッパー
-  * [ULG.nvim](https://github.com/taku25/UBT.nvim) - Unreal アウトプットログ＆トレースビュー
+  * [ULG.nvim](https://github.com/taku25/ULG.nvim) - Unreal アウトプットログ＆トレースビュー
 
 ## 📜 ライセンス (License)
 

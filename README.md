@@ -2,13 +2,11 @@
 
 # Unreal Shell 💓 Neovim
 
- 
 <table>
 <tr>
  <td><div align=center><img width="100%" alt="image" src="https://github.com/user-attachments/assets/d18ba4cb-2da1-4ac4-8b9f-8c150cdccf8f" /></div></td>
 </tr>
 </table>
-
 
 `USH.nvim` is a plugin to interact with Unreal Engine's interactive shell, `ushell`, directly from Neovim. It allows you to run various commands like `.build`, `.cook`, and `.run` within a persistent, asynchronous session.
 
@@ -25,8 +23,8 @@ Also available are [`ULG.nvim`](https://www.google.com/search?q=%5Bhttps://githu
   * **Flexible Configuration System**:
       * Based on `UNL.nvim`'s powerful configuration system, allowing project-specific settings in a `.unlrc.json` file in the project root to override global settings.
   * **Configurable Output**: Redirect real-time output from `ushell` to your preferred destination, such as a log viewer like [`ULG.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/ULG.nvim%5D\(https://github.com/taku25/ULG.nvim\)), `vim.notify`, or `vim.echo`, via the `emitter` setting.
-  * **Unified UI Picker**: Automatically detects popular UI plugins like [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) and [fzf-lua](https://github.com/ibhagwan/fzf-lua) to provide a seamless experience for selecting build targets. (**Optional**)
-  * **`UBT.nvim` Integration**: If `UBT.nvim` is installed, its build preset configuration is automatically loaded and used. Fallback presets are also built-in, allowing `USH.nvim` to function standalone.
+  * **Unified UI Picker**: Automatically detects popular UI plugins like [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) and [fzf-lua](https://github.com/ibhagwan/fzf-lua) to provide a seamless experience for selecting command presets. (**Optional**)
+  * **`UEP.nvim` / `UBT.nvim` Integration**: If `UBT.nvim` is installed, its build preset configuration is automatically loaded. If `UEP.nvim` is present, the module list for building can be selected via a picker. Fallback functionality is also built-in, allowing `USH.nvim` to function standalone.
 
 <table>
 <tr>
@@ -86,6 +84,41 @@ The following shows all available options with their default values.
   -- Default target when the target name is omitted in `:USH build`
   preset_target = "Win64DevelopWithEditor",
 
+  -- Cook command presets
+  cook_presets = {
+    { name = "Cook Game (Win64)", platform = "win64", type = "game", options = "" },
+    { name = "Cook Game OnTheFly (Win64)", platform = "win64", type = "game", options = "--onthefly" },
+  },
+
+  -- Run command presets
+  run_presets = {
+    { name = "Run Editor", mode = "editor", args = "" },
+    { name = "Run Game", mode = "game", args = "" },
+    { name = "Run Game (Debug)", mode = "game", args = "--attach" },
+    { name = "Run Program (UnrealInsights)", mode = "program", args = "UnrealInsights" },
+  },
+
+  -- Staging command presets
+  stage_presets = {
+    { name = "Stage Game (Win64)", args = "game win64" },
+    { name = "Stage Game (PS4, Dev, Full)", args = "game ps4 development pak --build --cook" },
+  },
+
+  -- UAT command presets
+  uat_presets = {
+    {
+      name = "Build, Cook, and Archive (Win64)",
+      command_string = "BuildAndCook -platform=Win64 -clientconfig=Development -cook -allmaps -build -stage -pak -archive",
+    },
+  },
+
+  -- P4 subcommands for the picker
+  p4_subcommands = {
+    { name = "sync", desc = "Syncs the current project and engine.", arg_required = false },
+    { name = "clean", desc = "Cleans intermediate files from the branch.", arg_required = false },
+    { name = "cherrypick", desc = "Integrates or reverts a changelist.", arg_required = true, arg_prompt = "Enter Changelist number(s):" },
+  },
+
   -- Specify the destination for output from ushell
   output = {
     emitter = "ULG", -- "ULG", "notify", "echo", "none"
@@ -128,16 +161,22 @@ Example: `.unlrc.json`
 
 Commands should be run from within an Unreal Engine project directory.
 
-```vim
-:USH start_session  " Starts the ushell session in the background.
-:USH stop_session   " Stops the current ushell session.
-:USH build[!]       " Builds the project. Use [!] to launch the UI picker.
-:USH direct ...     " Sends the command in '...' directly to ushell (e.g., :USH direct .cook).
-```
+| Command                     | Description                                                        |
+| --------------------------- | ------------------------------------------------------------------ |
+| `:USH start_session`        | Starts the `ushell` session in the background.                     |
+| `:USH stop_session`         | Stops the current `ushell` session.                                |
+| `:USH build[!] ...`         | Builds the project. Use `!` to launch the UI picker.               |
+| `:USH cook[!] ...`          | Cooks the project. Use `!` for the preset picker.                  |
+| `:USH run[!] ...`           | Runs the project or editor. Use `!` for the preset picker.         |
+| `:USH stage[!] ...`         | Performs staging. Use `!` for the preset picker.                   |
+| `:USH uat[!] ...`           | Runs the Unreal Automation Tool. Use `!` for the preset picker.    |
+| `:USH sln[!] [generate]`    | Operates on the solution file. Only `generate` is supported.       |
+| `:USH p4[!] ...`            | Executes Perforce commands. Use `!` for the subcommand picker.     |
+| `:USH direct ...`           | Sends the command in `...` directly to `ushell`.                   |
 
 ### 💓 UI Picker Integration (Telescope / fzf-lua)
 
-You can launch the UI picker to select a build target by running the `bang` version (`!`) of the command, e.g., `:USH build!`.
+You can launch the UI picker by running the `bang` version (`!`) of commands like `:USH build!`, `:USH cook!`, and `:USH run!` to easily select presets or subcommands.
 
 ## 🤖 API & Automation (Automation Examples)
 
@@ -196,7 +235,7 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY, EXPRESS OR
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY, KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
