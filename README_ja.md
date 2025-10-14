@@ -8,8 +8,7 @@
 
 `USH.nvim` は、Unreal Engine の対話的シェル `ushell` と連携し、`.build`, `.cook`, `.run` といった様々なコマンドを、Neovimから直接、永続的な非同期セッション内で実行するためのプラグインです。
 
-その他、Unreal Engine開発を強化するためのプラグイン群 ([`UEP.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/UEP.nvim%5D\(https://github.com/taku25/UEP.nvim\)), [`UCM.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/UCM.nvim%5D\(https://github.com/taku25/UCM.nvim\)), [`UBT.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/UBT.nvim%5D\(https://github.com/taku25/UBT.nvim\))) があります。
-([`ULG.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/ULG.nvim%5D\(https://github.com/taku25/ULG.nvim\)), [`neo-tree-unl.nvim`](https://www.google.com/search?q=%5Bhttps://github.com/taku25/neo-tree-unl.nvim%5D\(https://github.com/taku25/neo-tree-unl.nvim\))) ,[tree-sitter for Unreal Engine](https://www.google.com/search?q=https://github.com/taku25/tree-sitter-unreal-cpp)があります。
+
 
 [English](https://www.google.com/search?q=./README.md) | [日本語](https://www.google.com/search?q=./README_ja.md)
 
@@ -212,10 +211,20 @@ vim.api.nvim_create_autocmd("DirChanged", {
 
 Unreal Engine 関連プラグイン:
 
-  * [UEP.nvim](https://github.com/taku25/UEP.nvim) - Unreal Engine プロジェクトマネージャー
-  * [UCM.nvim](https://github.com/taku25/UCM.nvim) - Unreal Engine クラスマネージャー
-  * [UBT.nvim](https://github.com/taku25/UBT.nvim) - Unreal Build Tool ラッパー
-  * [ULG.nvim](https://github.com/taku25/ULG.nvim) - Unreal アウトプットログ＆トレースビュー
+* [UEP](https://github.com/taku25/UEP.nvim)
+  * urpojectを解析してファイルナビゲートなどを簡単に行えるようになります
+* [UBT](https://github.com/taku25/UBT.nvim)
+  * BuildやGenerateClangDataBaseなどを非同期でNeovim上から使えるようになります
+* [UCM](https://github.com/taku25/UCM.nvim)
+  * クラスの追加や削除がNeovim上からできるようになります。
+* [ULG](https://github.com/taku25/ULG.nvim)
+  * UEのログやliveCoding,stat fpsなどnvim上からできるようになります
+* [USH](https://github.com/taku25/USH.nvim)
+  * ushellをnvimから対話的に操作できるようになります
+* [neo-tree-unl](https://github.com/taku25/neo-tree-unl.nvim)
+  * IDEのようなプロジェクトエクスプローラーを表示できます。
+* [tree-sitter for Unreal Engine](https://github.com/taku25/tree-sitter-unreal-cpp)
+  * UCLASSなどを含めてtree-sitterの構文木を使ってハイライトができます。
 
 ## 📜 ライセンス (License)
 
