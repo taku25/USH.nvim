@@ -1,0 +1,309 @@
+*USH.txt* For USH.nvim                          vim: ft=help
+
+==============================================================================
+CONTENTS                                                 *USH-contents*
+
+  1. Introduction................................. |USH-introduction|
+  2. Usage........................................ |USH-usage|
+     - Command List............................... |USH-commands-list|
+     - Command Details............................ |USH-commands-detail|
+  3. Configuration................................ |USH-configuration|
+     - Setup...................................... |USH-setup|
+     - Project-specific Settings (.unlrc.json)... |USH-unlrc|
+     - Full Configuration......................... |USH-default-configuration|
+  4. Lua API...................................... |USH-api|
+  5. Automation Example........................... |USH-automation-example|
+  6. License...................................... |USH-license|
+
+==============================================================================
+1. Introduction                                     *USH-introduction*
+
+*USH.nvim* is a Neovim plugin designed to interact with Unreal Engine's
+interactive shell, `ushell`. It allows you to run various commands like
+`.build`, `.cook`, and `.run` within a persistent, asynchronous session
+directly from Neovim.
+
+Main Features:
+- Persistent Asynchronous Session:
+  Starts and manages a `ushell` session in the background using only Neovim's
+  standard functionality (`vim.fn.jobstart`). The session persists until
+  Neovim is closed.
+- Flexible Configuration System:
+  Based on `UNL.nvim`'s powerful configuration system, allowing
+  project-specific overrides via a `.unlrc.json` file.
+- Configurable Output:
+  Redirects real-time output from `ushell` to your preferred destination, such
+  as a log viewer like `ULG.nvim`, `vim.notify`, or `vim.echo`.
+- Unified UI Picker:
+  Automatically detects popular UI plugins like `telescope.nvim` and `fzf-lua`
+  to provide a seamless experience for selecting command presets.
+
+==============================================================================
+2. Usage                                                      *USH-usage*
+
+All commands for *USH.nvim* begin with `:USH`.
+
+------------------------------------------------------------------------------
+Command List                                           *USH-commands-list*
+
+:USH start_session
+    Starts a new ushell session for the current project.
+
+:USH stop_session
+    Stops the current ushell session.
+
+:USH build[!] [preset|target|program|misc|current] [...]
+    Builds the project. Use [!] to launch the UI picker.
+
+:USH cook[!] [...]
+    Cooks the project. Use [!] for the preset picker.
+
+:USH run[!] [...]
+    Runs the project or editor. Use [!] for the preset picker.
+
+:USH stage[!] [...]
+    Performs staging. Use [!] for the preset picker.
+
+:USH uat[!] [...]
+    Runs the Unreal Automation Tool. Use [!] for the preset picker.
+
+:USH sln
+    Generates the Visual Studio solution file (`.sln`).
+
+:USH p4[!] [...]
+    Executes Perforce commands. Use [!] for the subcommand picker.
+
+:USH direct [...]
+    Sends the command string directly to ushell.
+
+------------------------------------------------------------------------------
+Command Details                                     *USH-commands-detail*
+
+:USH start_session
+    Starts a `ushell` session in the background. This should be run first.
+
+:USH stop_session
+    Stops the currently running `ushell` session.
+
+:USH build[!] [preset|target|program|misc|current] [...]
+    - Without arguments, builds the default preset (`preset_target`).
+    - With `[!](bang)`, opens a UI to select the build mode (preset, module,
+      program, etc.).
+    - With subcommands (`target`, `program`, etc.), executes a specific build
+      type. E.g., `:USH build target MyModule`.
+
+:USH cook[!] [platform] [type] [options]
+    - With `[!](bang)`, opens a UI to select from `cook_presets`.
+    - With arguments, passes them directly to the `.cook` command.
+
+:USH run[!] [mode] [args...]
+    - With `[!](bang)`, opens a UI to select from `run_presets`.
+    - With arguments, passes them directly to the `.run` command.
+
+:USH stage[!] [args...]
+    - With `[!](bang)`, opens a UI to select from `stage_presets`.
+    - With arguments, passes them directly to the `.stage` command.
+
+:USH uat[!] [UAT Command and Args...]
+    - With `[!](bang)`, opens a UI to select from `uat_presets`.
+    - With arguments, passes them directly to the `.uat` command.
+
+:USH sln
+    A shortcut for `.sln generate`. This command does not take arguments.
+
+:USH p4[!] [subcommand] [args...]
+    - With `[!](bang)` or no arguments, opens a UI to select from
+      `p4_subcommands` defined in your configuration.
+    - With arguments, passes them directly to the `.p4` command.
+
+:USH direct [...]
+    Sends the entire argument string directly to the `ushell` session.
+    Useful for commands not explicitly supported. E.g.,
+    `:USH direct .p4 help`.
+
+==============================================================================
+3. Configuration                                       *USH-configuration*
+
+Configuration for *USH.nvim* is managed through the settings system of its
+dependency library, *UNL.nvim*.
+
+------------------------------------------------------------------------------
+Setup                                                          *USH-setup*
+
+If you are using `lazy.nvim`, pass a configuration table to the `opts` key. It
+is mandatory to specify `UNL.nvim` in the `dependencies` of `USH.nvim`.
+
+Example:
+>lua
+  return {
+    'taku25/USH.nvim',
+    dependencies = { 'taku25/UNL.nvim' },
+    opts = {
+      -- Configure USH through UNL.nvim
+      preset_target = "Win64DevelopWithEditor",
+      output = { emitter = "ULG" },
+    },
+  }
+<
+------------------------------------------------------------------------------
+Project-specific Settings (.unlrc.json)                  *USH-unlrc*
+
+By creating a JSON file named `.unlrc.json` in the root directory of your
+project, you can override global settings for that project only.
+
+Example:
+>json
+  {
+    "preset_target": "Win64Shipping"
+  }
+<
+------------------------------------------------------------------------------
+Full Configuration                           *USH-default-configuration*
+
+The following shows all available options with their default values.
+
+>lua
+{
+  -- Manually specify the engine path if automatic detection fails.
+  -- Example: "C:/Program Files/Epic Games/UE_5.4"
+  engine_path = nil,
+
+  -- Fallback build presets for when UBT.nvim's config is not available
+  presets = {
+    { name = "Win64DevelopWithEditor", Platform = "Win64", IsEditor = true, Configuration = "Development" },
+    { name = "Win64DebugGameWithEditor", Platform = "Win64", IsEditor = true, Configuration = "DebugGame" },
+  },
+
+  -- Default target when the target name is omitted in `:USH build`
+  preset_target = "Win64DevelopWithEditor",
+
+  -- Cook command presets
+  cook_presets = {
+    { name = "Cook Game (Win64)", platform = "win64", type = "game", options = "" },
+  },
+
+  -- Run command presets
+  run_presets = {
+    { name = "Run Editor", mode = "editor", args = "" },
+    { name = "Run Game", mode = "game", args = "" },
+  },
+
+  -- UAT command presets
+  uat_presets = {
+    {
+      name = "Build, Cook, and Archive (Win64)",
+      command_string = "BuildAndCook -platform=Win64 -clientconfig=Development -cook -allmaps -build -stage -pak -archive",
+    },
+  },
+
+  -- Staging command presets
+  stage_presets = {
+    { name = "Stage Game (Win64)", args = "game win64" },
+  },
+
+  -- P4 subcommands for the picker
+  p4_subcommands = {
+    { name = "sync", desc = "Syncs the current project and engine.", arg_required = false },
+    { name = "cherrypick", desc = "Integrates or reverts a changelist.", arg_required = true, arg_prompt = "Enter Changelist number(s):" },
+  },
+
+  -- Specify the destination for output from ushell
+  output = {
+    emitter = "ULG", -- "ULG", "notify", "echo", "none"
+    notify = {
+      level = vim.log.levels.INFO,
+    },
+  },
+}
+<
+==============================================================================
+4. Lua API                                                     *USH-api*
+
+You can call plugin features directly from Lua.
+
+Require the API module:
+>lua
+  local ush_api = require("USH.api")
+<
+
+*ush_api.start_session({opts})*
+    Starts a new ushell session.
+
+*ush_api.stop_session()*
+    Stops the current ushell session.
+
+*ush_api.build({opts})*
+    Executes the build command. `opts.has_bang = true` opens the picker.
+
+*ush_api.cook({opts})*
+    Executes the cook command. `opts.has_bang = true` opens the picker.
+
+*ush_api.run({opts})*
+    Executes the run command. `opts.has_bang = true` opens the picker.
+
+*ush_api.stage({opts})*
+    Executes the stage command. `opts.has_bang = true` opens the picker.
+
+*ush_api.uat({opts})*
+    Executes the uat command. `opts.has_bang = true` opens the picker.
+
+*ush_api.sln({opts})*
+    Executes the sln command.
+
+*ush_api.p4({opts})*
+    Executes the p4 command. `opts.has_bang = true` opens the picker.
+
+*ush_api.direct({opts})*
+    Sends a raw command string. `opts.args` should be a table of strings.
+
+==============================================================================
+5. Automation Example                         *USH-automation-example*
+
+Automatically start a session when entering an Unreal Engine project.
+
+>lua
+  local ush_auto_start_group = vim.api.nvim_create_augroup("USH_AutoStartSession", { clear = true })
+  vim.api.nvim_create_autocmd("DirChanged", {
+    group = ush_auto_start_group,
+    pattern = "*",
+    callback = function()
+      local finder = require("UNL.finder")
+      if not finder.project.find_project(vim.fn.getcwd()) then
+        return
+      end
+
+      local session = require("USH.session")
+      if not session.is_active() then
+        vim.schedule(function()
+          require("USH.api").start_session()
+        end)
+      end
+    end,
+  })
+<
+==============================================================================
+6. License                                                *USH-license*
+
+MIT License
+
+Copyright (c) 2025 taku25
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:

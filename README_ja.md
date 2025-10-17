@@ -78,6 +78,10 @@ return {
     { name = "Win64Shipping", Platform = "Win64", IsEditor = false, Configuration = "Shipping" },
   },
 
+  -- エンジンの自動検出が失敗する場合に、手動でパスを指定します
+  -- 例: "C:/Program Files/Epic Games/UE_5.4"
+  engine_path = nil,
+
   -- :USH build でターゲット名を省略した際のデフォルト
   preset_target = "Win64DevelopWithEditor",
 

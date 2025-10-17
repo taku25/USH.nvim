@@ -18,6 +18,8 @@ local M = {
   },
   cache = { dirname = "USH" },
 
+  engine_path = nil,
+
   presets = {
     { name = "Win64DebugGame", Platform = "Win64", IsEditor = false, Configuration = "DebugGame" },
     { name = "Win64Develop", Platform = "Win64", IsEditor = false, Configuration = "Development" },

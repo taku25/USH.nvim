@@ -3,6 +3,8 @@
 local emitter = require("USH.emitter")
 local log = require("USH.logger")
 local unl_finder = require("UNL.finder")
+local unl_config = require("UNL.config")
+
 
 local M = {
   job_id = nil,
@@ -56,7 +58,9 @@ function M.start(opts)
     return vim.notify("USH Error: .uproject file not found.", vim.log.levels.ERROR)
   end
 
-  local engine = unl_finder.engine.find_engine_root(project.uproject)
+  local engine = unl_finder.engine.find_engine_root(project.uproject, {
+    engine_override_path = unl_config.get("USH").engine_path,
+  })
   if not engine then
     return vim.notify("USH Error: Could not find Engine root.", vim.log.levels.ERROR)
   end

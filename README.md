@@ -79,6 +79,9 @@ The following shows all available options with their default values.
     { name = "Win64DebugGame", Platform = "Win64", IsEditor = false, Configuration = "DebugGame" },
     { name = "Win64Shipping", Platform = "Win64", IsEditor = false, Configuration = "Shipping" },
   },
+  -- Manually specify the engine path if automatic detection fails.
+  -- Example: "C:/Program Files/Epic Games/UE_5.4"
+  engine_path = nil,
 
   -- Default target when the target name is omitted in `:USH build`
   preset_target = "Win64DevelopWithEditor",
@@ -117,7 +120,6 @@ The following shows all available options with their default values.
     { name = "clean", desc = "Cleans intermediate files from the branch.", arg_required = false },
     { name = "cherrypick", desc = "Integrates or reverts a changelist.", arg_required = true, arg_prompt = "Enter Changelist number(s):" },
   },
-
   -- Specify the destination for output from ushell
   output = {
     emitter = "ULG", -- "ULG", "notify", "echo", "none"
