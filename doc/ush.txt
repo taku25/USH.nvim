@@ -18,7 +18,7 @@ CONTENTS                                                 *USH-contents*
 ==============================================================================
 1. Introduction                                     *USH-introduction*
 
-*USH.nvim* is a Neovim plugin designed to interact with Unreal Engine's
+USH.nvim is a Neovim plugin designed to interact with Unreal Engine's
 interactive shell, `ushell`. It allows you to run various commands like
 `.build`, `.cook`, and `.run` within a persistent, asynchronous session
 directly from Neovim.
@@ -41,7 +41,7 @@ Main Features:
 ==============================================================================
 2. Usage                                                      *USH-usage*
 
-All commands for *USH.nvim* begin with `:USH`.
+All commands for USH.nvim begin with `:USH`.
 
 ------------------------------------------------------------------------------
 Command List                                           *USH-commands-list*
@@ -124,8 +124,8 @@ Command Details                                     *USH-commands-detail*
 ==============================================================================
 3. Configuration                                       *USH-configuration*
 
-Configuration for *USH.nvim* is managed through the settings system of its
-dependency library, *UNL.nvim*.
+Configuration for USH.nvim is managed through the settings system of its
+dependency library, UNL.nvim.
 
 ------------------------------------------------------------------------------
 Setup                                                          *USH-setup*
