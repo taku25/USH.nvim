@@ -1,22 +1,22 @@
-*USH.jax* For USH.nvim                          vim: ft=help
+*USH.jax* For USH.nvim                          vim: ft=help
 
 ==============================================================================
-目次                                                     *USH-contents*
+目次                                                     *USH-contents@ja*
 
-  1. はじめに..................................... |USH-introduction|
-  2. 使い方....................................... |USH-usage|
-     - コマンド一覧............................... |USH-commands-list|
-     - コマンド詳細............................... |USH-commands-detail|
-  3. 設定......................................... |USH-configuration|
-     - セットアップ............................... |USH-setup|
-     - プロジェクト固有の設定 (.unlrc.json)....... |USH-unlrc|
-     - フルコンフィグ............................. |USH-default-configuration|
-  4. Lua API...................................... |USH-api|
-  5. 自動化の例................................... |USH-automation-example|
-  6. ライセンス................................... |USH-license|
+  1. はじめに..................................... |USH-introduction@ja|
+  2. 使い方....................................... |USH-usage@ja|
+     - コマンド一覧............................... |USH-commands-list@ja|
+     - コマンド詳細............................... |USH-commands-detail@ja|
+  3. 設定......................................... |USH-configuration@ja|
+     - セットアップ............................... |USH-setup@ja|
+     - プロジェクト固有の設定 (.unlrc.json)....... |USH-unlrc@ja|
+     - フルコンフィグ............................. |USH-default-configuration@ja|
+  4. Lua API...................................... |USH-api@ja|
+  5. 自動化の例................................... |USH-automation-example@ja|
+  6. ライセンス................................... |USH-license@ja|
 
 ==============================================================================
-1. はじめに                                         *USH-introduction*
+1. はじめに                                         *USH-introduction@ja*
 
 USH.nvim は、Unreal Engine の対話的シェル `ushell` と連携し、`.build`,
 `.cook`, `.run` といった様々なコマンドを、Neovimから直接、永続的な非同期
@@ -24,264 +24,264 @@ USH.nvim は、Unreal Engine の対話的シェル `ushell` と連携し、`.bui
 
 主な機能:
 - 永続的な非同期セッション:
-  Neovimの標準機能（`vim.fn.jobstart`）のみを使用し、`ushell` をバック
-  グラウンドで起動・管理します。一度起動すれば、Neovimを閉じるまでセッ
-  ションが維持されます。
+  Neovimの標準機能（`vim.fn.jobstart`）のみを使用し、`ushell` をバック
+  グラウンドで起動・管理します。一度起動すれば、Neovimを閉じるまでセッ
+  ションが維持されます。
 - 柔軟な設定システム:
-  `UNL.nvim` の強力な設定システムをベースにしており、プロジェクトルートの
-  `.unlrc.json` ファイルによるプロジェクト固有設定の上書きが可能です。
+  `UNL.nvim` の強力な設定システムをベースにしており、プロジェクトルートの
+  `.unlrc.json` ファイルによるプロジェクト固有設定の上書きが可能です。
 - 設定可能な出力:
-  `ushell` からのリアルタイムな出力を、`ULG.nvim` のようなログビューアーや、
-  `vim.notify`, `vim.echo` など、好みの場所にリダイレクトできます。
+  `ushell` からのリアルタイムな出力を、`ULG.nvim` のようなログビューアーや、
+  `vim.notify`, `vim.echo` など、好みの場所にリダイレクトできます。
 - 統一されたUIピッカー:
-  `telescope.nvim` や `fzf-lua` といった人気のUIプラグインを自動で認識し、
-  コマンドのプリセット選択を快適に行えます。
+  `telescope.nvim` や `fzf-lua` といった人気のUIプラグインを自動で認識し、
+  コマンドのプリセット選択を快適に行えます。
 
 ==============================================================================
-2. 使い方                                                     *USH-usage*
+2. 使い方                                                     *USH-usage@ja*
 
 USH.nvim のコマンドはすべて `:USH` から始まります。
 
 ------------------------------------------------------------------------------
-コマンド一覧                                           *USH-commands-list*
+コマンド一覧                                           *USH-commands-list@ja*
 
 :USH start_session
-  現在のプロジェクトに対して新しいushellセッションを開始します。
+  現在のプロジェクトに対して新しいushellセッションを開始します。
 
 :USH stop_session
-  現在のushellセッションを停止します。
+  現在のushellセッションを停止します。
 
 :USH build[!] [preset|target|program|misc|current] [...]
-  プロジェクトをビルドします。[!]付きでUIピッカーを起動します。
+  プロジェクトをビルドします。[!]付きでUIピッカーを起動します。
 
 :USH cook[!] [...]
-  プロジェクトをクックします。[!]付きでプリセットピッカーを起動します。
+  プロジェクトをクックします。[!]付きでプリセットピッカーを起動します。
 
 :USH run[!] [...]
-  プロジェクトやエディタを実行します。[!]付きでプリセットピッカーを起動します。
+  プロジェクトやエディタを実行します。[!]付きでプリセットピッカーを起動します。
 
 :USH stage[!] [...]
-  ステージングを実行します。[!]付きでプリセットピッカーを起動します。
+  ステージングを実行します。[!]付きでプリセットピッカーを起動します。
 
 :USH uat[!] [...]
-  Unreal Automation Toolを実行します。[!]付きでプリセットピッカーを起動します。
+  Unreal Automation Toolを実行します。[!]付きでプリセットピッカーを起動します。
 
 :USH sln
-  Visual Studioのソリューションファイル(`.sln`)を生成します。
+  Visual Studioのソリューションファイル(`.sln`)を生成します。
 
 :USH p4[!] [...]
-  Perforceコマンドを実行します。[!]付きでサブコマンドピッカーを起動します。
+  Perforceコマンドを実行します。[!]付きでサブコマンドピッカーを起動します。
 
 :USH direct [...]
-  コマンド文字列を直接ushellに送信します。
+  コマンド文字列を直接ushellに送信します。
 
 ------------------------------------------------------------------------------
-コマンド詳細                                         *USH-commands-detail*
+コマンド詳細                                         *USH-commands-detail@ja*
 
 :USH start_session
-    `ushell`セッションをバックグラウンドで開始します。最初に実行する必要が
-    あります。
+    `ushell`セッションをバックグラウンドで開始します。最初に実行する必要が
+    あります。
 
 :USH stop_session
-    現在実行中の`ushell`セッションを停止します。
+    現在実行中の`ushell`セッションを停止します。
 
 :USH build[!] [preset|target|program|misc|current] [...]
-    - 引数なし: デフォルトのプリセット(`preset_target`)をビルドします。
-    - `[!](bang)`付き: ビルドモード(プリセット、モジュール、プログラム等)を
-      選択するUIを開きます。
-    - サブコマンド付き: 特定のビルドタイプを実行します。
-      例: `:USH build target MyModule`
+    - 引数なし: デフォルトのプリセット(`preset_target`)をビルドします。
+    - `[!](bang)`付き: ビルドモード(プリセット、モジュール、プログラム等)を
+      選択するUIを開きます。
+    - サブコマンド付き: 特定のビルドタイプを実行します。
+      例: `:USH build target MyModule`
 
 :USH cook[!] [platform] [type] [options]
-    - `[!](bang)`付き: `cook_presets`から選択するUIを開きます。
-    - 引数付き: 引数を直接`.cook`コマンドに渡します。
+    - `[!](bang)`付き: `cook_presets`から選択するUIを開きます。
+    - 引数付き: 引数を直接`.cook`コマンドに渡します。
 
 :USH run[!] [mode] [args...]
-    - `[!](bang)`付き: `run_presets`から選択するUIを開きます。
-    - 引数付き: 引数を直接`.run`コマンドに渡します。
+    - `[!](bang)`付き: `run_presets`から選択するUIを開きます。
+    - 引数付き: 引数を直接`.run`コマンドに渡します。
 
 :USH stage[!] [args...]
-    - `[!](bang)`付き: `stage_presets`から選択するUIを開きます。
-    - 引数付き: 引数を直接`.stage`コマンドに渡します。
+    - `[!](bang)`付き: `stage_presets`から選択するUIを開きます。
+    - 引数付き: 引数を直接`.stage`コマンドに渡します。
 
 :USH uat[!] [UAT Command and Args...]
-    - `[!](bang)`付き: `uat_presets`から選択するUIを開きます。
-    - 引数付き: 引数を直接`.uat`コマンドに渡します。
+    - `[!](bang)`付き: `uat_presets`から選択するUIを開きます。
+    - 引数付き: 引数を直接`.uat`コマンドに渡します。
 
 :USH sln
-    `.sln generate`のショートカットです。引数は取りません。
+    `.sln generate`のショートカットです。引数は取りません。
 
 :USH p4[!] [subcommand] [args...]
-    - `[!](bang)`付き、または引数なし: 設定で定義された`p4_subcommands`から
-      選択するUIを開きます。
-    - 引数付き: 引数を直接`.p4`コマンドに渡します。
+    - `[!](bang)`付き、または引数なし: 設定で定義された`p4_subcommands`から
+      選択するUIを開きます。
+    - 引数付き: 引数を直接`.p4`コマンドに渡します。
 
 :USH direct [...]
-    引数文字列全体をそのまま`ushell`セッションに送信します。明示的にサポート
-    されていないコマンドに便利です。例: `:USH direct .p4 help`
+    引数文字列全体をそのまま`ushell`セッションに送信します。明示的にサポート
+    されていないコマンドに便利です。例: `:USH direct .p4 help`
 
 ==============================================================================
-3. 設定                                           *USH-configuration*
+3. 設定                                           *USH-configuration@ja*
 
 USH.nvim の設定は、依存ライブラリである UNL.nvim の設定システムを通じて
 行われます。
 
 ------------------------------------------------------------------------------
-セットアップ                                                  *USH-setup*
+セットアップ                                                  *USH-setup@ja*
 
 `lazy.nvim`を使っている場合、`opts`キーに設定テーブルを渡します。`USH.nvim`
 の `dependencies` に `UNL.nvim` を指定することが必須です。
 
 例:
 >lua
-  return {
-    'taku25/USH.nvim',
-    dependencies = { 'taku25/UNL.nvim' },
-    opts = {
-      -- UNL.nvimを通じてUSHの設定を行う
-      preset_target = "Win64DevelopWithEditor",
-      output = { emitter = "ULG" },
-    },
-  }
+  return {
+    'taku25/USH.nvim',
+    dependencies = { 'taku25/UNL.nvim' },
+    opts = {
+      -- UNL.nvimを通じてUSHの設定を行う
+      preset_target = "Win64DevelopWithEditor",
+      output = { emitter = "ULG" },
+    },
+  }
 <
 ------------------------------------------------------------------------------
-プロジェクト固有の設定 (.unlrc.json)                      *USH-unlrc*
+プロジェクト固有の設定 (.unlrc.json)                      *USH-unlrc@ja*
 
 プロジェクトのルートディレクトリに`.unlrc.json`という名前のJSONファイルを作成
 することで、グローバルな設定をそのプロジェクトでのみ上書きできます。
 
 例:
 >json
-  {
-    "preset_target": "Win64Shipping"
-  }
+  {
+    "preset_target": "Win64Shipping"
+  }
 <
 ------------------------------------------------------------------------------
-フルコンフィグ                               *USH-default-configuration*
+フルコンフィグ                               *USH-default-configuration@ja*
 
 以下は、設定可能なすべてのオプションと、そのデフォルト値です。
 
 >lua
 {
-  -- エンジンの自動検出が失敗する場合に、手動でパスを指定します
-  -- 例: "C:/Program Files/Epic Games/UE_5.4"
-  engine_path = nil,
+  -- エンジンの自動検出が失敗する場合に、手動でパスを指定します
+  -- 例: "C:/Program Files/Epic Games/UE_5.4"
+  engine_path = nil,
 
-  -- UBT.nvim の設定がない場合のフォールバック用ビルドプリセット
-  presets = {
-    { name = "Win64DevelopWithEditor", Platform = "Win64", IsEditor = true, Configuration = "Development" },
-    { name = "Win64DebugGameWithEditor", Platform = "Win64", IsEditor = true, Configuration = "DebugGame" },
-  },
+  -- UBT.nvim の設定がない場合のフォールバック用ビルドプリセット
+  presets = {
+    { name = "Win64DevelopWithEditor", Platform = "Win64", IsEditor = true, Configuration = "Development" },
+    { name = "Win64DebugGameWithEditor", Platform = "Win64", IsEditor = true, Configuration = "DebugGame" },
+  },
 
-  -- :USH build でターゲット名を省略した際のデフォルト
-  preset_target = "Win64DevelopWithEditor",
+  -- :USH build でターゲット名を省略した際のデフォルト
+  preset_target = "Win64DevelopWithEditor",
 
-  -- Cookコマンドプリセット
-  cook_presets = {
-    { name = "Cook Game (Win64)", platform = "win64", type = "game", options = "" },
-  },
+  -- Cookコマンドプリセット
+  cook_presets = {
+    { name = "Cook Game (Win64)", platform = "win64", type = "game", options = "" },
+  },
 
-  -- Runコマンドプリセット
-  run_presets = {
-    { name = "Run Editor", mode = "editor", args = "" },
-    { name = "Run Game", mode = "game", args = "" },
-  },
+  -- Runコマンドプリセット
+  run_presets = {
+    { name = "Run Editor", mode = "editor", args = "" },
+    { name = "Run Game", mode = "game", args = "" },
+  },
 
-  -- UATコマンドプリセット
-  uat_presets = {
-    {
-      name = "Build, Cook, and Archive (Win64)",
-      command_string = "BuildAndCook -platform=Win64 -clientconfig=Development -cook -allmaps -build -stage -pak -archive",
-    },
-  },
+  -- UATコマンドプリセット
+  uat_presets = {
+    {
+      name = "Build, Cook, and Archive (Win64)",
+      command_string = "BuildAndCook -platform=Win64 -clientconfig=Development -cook -allmaps -build -stage -pak -archive",
+    },
+  },
 
-  -- Stagingコマンドプリセット
-  stage_presets = {
-    { name = "Stage Game (Win64)", args = "game win64" },
-  },
+  -- Stagingコマンドプリセット
+  stage_presets = {
+    { name = "Stage Game (Win64)", args = "game win64" },
+  },
 
-  -- P4サブコマンドピッカー用設定
-  p4_subcommands = {
-    { name = "sync", desc = "現在のプロジェクトとエンジンを同期します。", arg_required = false },
-    { name = "cherrypick", desc = "チェンジリストを統合または取り消します。", arg_required = true, arg_prompt = "チェンジリスト番号を入力:" },
-  },
+  -- P4サブコマンドピッカー用設定
+  p4_subcommands = {
+    { name = "sync", desc = "現在のプロジェクトとエンジンを同期します。", arg_required = false },
+    { name = "cherrypick", desc = "チェンジリストを統合または取り消します。", arg_required = true, arg_prompt = "チェンジリスト番号を入力:" },
+  },
 
-  -- ushellからの出力先を指定
-  output = {
-    emitter = "ULG", -- "ULG", "notify", "echo", "none"
-    notify = {
-      level = vim.log.levels.INFO,
-    },
-  },
+  -- ushellからの出力先を指定
+  output = {
+    emitter = "ULG", -- "ULG", "notify", "echo", "none"
+    notify = {
+      level = vim.log.levels.INFO,
+    },
+  },
 }
 <
 ==============================================================================
-4. Lua API                                                     *USH-api*
+4. Lua API                                                     *USH-api@ja*
 
 プラグインの機能をLuaから直接呼び出すことができます。
 
 APIモジュールを`require`する:
 >lua
-  local ush_api = require("USH.api")
+  local ush_api = require("USH.api")
 <
 
 *ush_api.start_session({opts})*
-    新しいushellセッションを開始します。
+    新しいushellセッションを開始します。
 
 *ush_api.stop_session()*
-    現在のushellセッションを停止します。
+    現在のushellセッションを停止します。
 
 *ush_api.build({opts})*
-    ビルドコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
+    ビルドコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
 
 *ush_api.cook({opts})*
-    クックコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
+    クックコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
 
 *ush_api.run({opts})*
-    実行コマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
+    実行コマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
 
 *ush_api.stage({opts})*
-    ステージングコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
+    ステージングコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
 
 *ush_api.uat({opts})*
-    UATコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
+    UATコマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
 
 *ush_api.sln({opts})*
-    slnコマンドを実行します。
+    slnコマンドを実行します。
 
 *ush_api.p4({opts})*
-    p4コマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
+    p4コマンドを実行します。`opts.has_bang = true`でピッカーを開きます。
 
 *ush_api.direct({opts})*
-    生のコマンド文字列を送信します。`opts.args`は文字列のテーブルです。
+    生のコマンド文字列を送信します。`opts.args`は文字列のテーブルです。
 
 ==============================================================================
-5. 自動化の例                                   *USH-automation-example*
+5. 自動化の例                                   *USH-automation-example@ja*
 
 Unreal Engineプロジェクトに入ったときに自動でセッションを開始します。
 
 >lua
-  local ush_auto_start_group = vim.api.nvim_create_augroup("USH_AutoStartSession", { clear = true })
-  vim.api.nvim_create_autocmd("DirChanged", {
-    group = ush_auto_start_group,
-    pattern = "*",
-    callback = function()
-      local finder = require("UNL.finder")
-      if not finder.project.find_project(vim.fn.getcwd()) then
-        return
-      end
+  local ush_auto_start_group = vim.api.nvim_create_augroup("USH_AutoStartSession", { clear = true })
+  vim.api.nvim_create_autocmd("DirChanged", {
+    group = ush_auto_start_group,
+    pattern = "*",
+    callback = function()
+      local finder = require("UNL.finder")
+      if not finder.project.find_project(vim.fn.getcwd()) then
+        return
+      end
 
-      local session = require("USH.session")
-      if not session.is_active() then
-        vim.schedule(function()
-          require("USH.api").start_session()
-        end)
-      end
-    end,
-  })
+      local session = require("USH.session")
+      if not session.is_active() then
+        vim.schedule(function()
+          require("USH.api").start_session()
+        end)
+      end
+    end,
+  })
 <
 ==============================================================================
-6. ライセンス                                             *USH-license*
+6. ライセンス                        M                  *USH-license@ja*
 
 MIT License
 
@@ -305,4 +305,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ==============================================================================
- vim:tw=78:ts=8:ft=help:norl:
+ vim:tw=78:ts=8:ft=help:norl:
