@@ -171,35 +171,26 @@ local function execute_with_picker()
         })
       end },
     { name = " Build Module", handler = function()
-        local ok, modules = unl_api.provider.request("uep.get_project_modules")
-
-        -- ▼▼▼【修正点】最初の戻り値 `ok` を使って成功判定を行う ▼▼▼
-        if not ok or type(modules) ~= "table" or #modules == 0 then
-          -- ユーザーに状況を通知
-          
-          -- 手動入力UIを起動
-          vim.ui.input({ prompt = "Enter Module or File Path:" }, function(input)
-            if input and #input > 0 then
-              execute_target({ input })
+        unl_api.db.get_modules(function(modules, err)
+            if err or not modules or #modules == 0 then
+              vim.ui.input({ prompt = "Enter Module or File Path:" }, function(input)
+                if input and #input > 0 then execute_target({ input }) end
+              end)
+            else
+              unl_picker.pick({
+                items = modules,
+                title = " Select Module to Build",
+                conf = ush_conf,
+                preview_enabled = false,
+                format = function(entry)
+                  return string.format("%s (%s)", entry.name, entry.type or entry.category or "N/A")
+                end,
+                on_submit = function(selected_module)
+                  if selected_module then execute_target({ selected_module.name }) end
+                end,
+              })
             end
-          end)
-        else
-          -- 正常にmodulesが取得できた場合はピッカーを表示
-          unl_picker.pick({
-            items = modules,
-            title = " Select Module to Build",
-            conf = ush_conf,
-            preview_enabled = false,
-            format = function(entry)
-              return string.format("%s (%s)", entry.name, entry.category)
-            end,
-            on_submit = function(selected_module)
-              if selected_module then
-                execute_target({ selected_module.name })
-              end
-            end,
-          })
-        end
+        end)
       end },
     { name = "󰗼 Build Program", handler = function()
         vim.ui.input({ prompt = "Enter Program Name (e.g., UnrealInsights):" }, function(input)

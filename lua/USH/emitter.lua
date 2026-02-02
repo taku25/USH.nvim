@@ -14,28 +14,41 @@ function M.emit(lines, meta)
   meta = meta or {}
   local conf = unl_config.get("USH").output
   
-  if conf.emitter == "ULG" then
-    -- ULGのProviderに通知を試みる
+  -- エミッターの決定
+  local emitter_type = conf.emitter
+  
+  -- ULGが指定されているが、プロバイダーが存在しない場合は notify にフォールバック
+  if emitter_type == "ULG" then
+    local providers = require("UNL.provider.registry").get_all(ULG_GENERAL_LOG_CAPABILITY)
+    if #providers == 0 then
+      log.warn_once("ULG provider not found. Falling back to 'notify'.")
+      emitter_type = "notify"
+    end
+  end
+
+  if emitter_type == "ULG" then
+    -- ULGのProviderに通知
     unl_provider.notify(ULG_GENERAL_LOG_CAPABILITY, {
       lines = lines,
-      meta = meta, -- エラー情報などを渡せる
+      meta = meta, 
+      ensure_window = true, -- ウィンドウを開くように要求（ULG側が対応していれば）
     })
 
-  elseif conf.emitter == "notify" then
+  elseif emitter_type == "notify" then
     local content = table.concat(lines, "\n")
     vim.notify(content, conf.notify.level, { title = "USH" })
 
-  elseif conf.emitter == "echo" then
+  elseif emitter_type == "echo" then
     local chunks = {}
     for _, line in ipairs(lines) do
       table.insert(chunks, { line, "Normal" })
     end
     vim.api.nvim_echo(chunks, true, {})
   
-  elseif conf.emitter == "none" then
+  elseif emitter_type == "none" then
     -- 何もしない
   else
-    log.warn("Unknown output emitter specified: '%s'", conf.emitter)
+    log.warn("Unknown output emitter specified: '%s'", emitter_type)
   end
 end
 

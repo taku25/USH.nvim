@@ -67,11 +67,16 @@ function M.start(opts)
 
   local boot_cmd_dir = engine .. "/Engine/Extras/ushell/channels/flow/nt"
 
+  local cwd = project.root
+  if vim.fn.has("win32") == 1 then
+    cwd = cwd:gsub("/", "\\")
+  end
+
   local command
   local command_args
   local job_opts = {
     -- cwd (カレントディレクトリ) は必ずプロジェクトのルートに設定
-    cwd = project.root,
+    cwd = cwd,
     on_stdout = on_stdout,
     on_stderr = on_stderr,
     on_exit = on_exit,
