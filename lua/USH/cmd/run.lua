@@ -1,7 +1,7 @@
 -- lua/USH/cmd/run.lua (新規作成)
 
 local session = require("USH.session")
-local unl_picker = require("UNL.backend.picker")
+local unl_picker = require("UNL.picker")
 local unl_config = require("UNL.config")
 local log = require("UNL.logging").get("USH")
 
@@ -38,7 +38,7 @@ function M.execute(opts)
       return vim.notify("No run presets defined in config.", vim.log.levels.WARN)
     end
 
-    unl_picker.pick({
+    unl_picker.open({
       items = presets,
       title = " Select Run Preset",
       conf = ush_conf,
@@ -64,3 +64,4 @@ function M.execute(opts)
 end
 
 return M
+

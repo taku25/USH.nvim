@@ -1,7 +1,7 @@
 -- lua/USH/cmd/cook.lua (修正版)
 
 local session = require("USH.session")
-local unl_picker = require("UNL.backend.picker")
+local unl_picker = require("UNL.picker")
 local unl_config = require("UNL.config")
 local log = require("UNL.logging").get("USH")
 
@@ -48,7 +48,7 @@ function M.execute(opts)
       return vim.notify("No cook presets defined in config.", vim.log.levels.WARN)
     end
 
-    unl_picker.pick({
+    unl_picker.open({
       items = presets,
       title = " Select Cook Preset",
       conf = ush_conf,
@@ -74,3 +74,4 @@ function M.execute(opts)
 end
 
 return M
+

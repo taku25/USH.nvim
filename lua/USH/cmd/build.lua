@@ -1,7 +1,7 @@
 -- lua/USH/cmd/build.lua (完全版)
 
 local session = require("USH.session")
-local unl_picker = require("UNL.backend.picker")
+local unl_picker = require("UNL.picker")
 local unl_config = require("UNL.config")
 local unl_finder = require("UNL.finder")
 local log = require("UNL.logging").get("USH")
@@ -155,7 +155,7 @@ local function execute_with_picker()
     { name = "󰆍 Build from Preset", handler = function()
         local conf = get_active_config() -- プリセットビルドは従来通り UBT も見る
         if not conf then return vim.notify("Build presets not found.", vim.log.levels.WARN) end
-        unl_picker.pick({
+        unl_picker.open({
           items = conf.presets,
           title = " Select Build Preset",
           conf = conf,
@@ -177,7 +177,7 @@ local function execute_with_picker()
                 if input and #input > 0 then execute_target({ input }) end
               end)
             else
-              unl_picker.pick({
+              unl_picker.open({
                 items = modules,
                 title = " Select Module to Build",
                 conf = ush_conf,
@@ -203,7 +203,7 @@ local function execute_with_picker()
     { name = " Compile Current File", handler = execute_current_file }
   }
 
-  unl_picker.pick({
+  unl_picker.open({
     items = build_modes,
     title = " Select Build Mode",
     conf = ush_conf, -- ◀◀◀ ユーザーの修正を反映
@@ -257,3 +257,4 @@ function M.execute(opts)
 end
 
 return M
+
